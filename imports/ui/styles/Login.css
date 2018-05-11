@@ -1,0 +1,50 @@
+body{
+  margin: 0;
+}
+
+.customBtn {
+  display: flex;
+  background: white;
+  color: #444;
+  width: 190px;
+  border-radius: 5px;
+  border: thin solid #888;
+  box-shadow: 1px 1px 1px grey;
+}
+
+.customBtn:focus {outline:0;}
+
+.customBtn:hover {
+  cursor: pointer;
+}
+
+.customBtn:active {
+  transform: translateY(1px);
+}
+
+.customBtn-label {
+  font-family: serif;
+  font-weight: normal;
+}
+
+.customBtn-icon {
+  width: 42px;
+  height: 42px;
+}
+
+.customBtn-buttonText {
+  width:100%;
+  margin:auto;
+  text-align: center;
+  font-size: 14px;
+  /* Use the Roboto font that is loaded in the <head> */
+  font-family: 'Roboto', sans-serif;
+}
+
+.page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
