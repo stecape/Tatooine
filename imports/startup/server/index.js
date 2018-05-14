@@ -11,4 +11,5 @@ Meteor.startup(() => {
       }
     }
 	)
+//	Roles.addUsersToRoles("kLJd3LXs9qhutwSa3", ['ras'])
 })

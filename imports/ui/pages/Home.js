@@ -6,10 +6,10 @@ export default class Home extends React.Component {
   render () {
   	this.getPhotos = () => {
   		var config = {
-        headers: 	{
-		    	'ContentType': 'application/json',
-		    	'Authorization': 'Bearer ' + encodeURIComponent(this.props.user.services.google.accessToken)
-		  	}
+        headers: 	{	
+          'ContentType': 'application/json',
+          'Authorization': 'bearer ' + this.props.user.services.google.accessToken
+        }
    		}
    		var bodyParams = {
    			"pageSize":"100"
