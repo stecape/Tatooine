@@ -1,9 +1,12 @@
 import React from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 export default class Home extends React.Component {
 
   render () {
+
+
   	this.getPhotos = () => {
   		var config = {
         headers: 	{	
@@ -23,11 +26,12 @@ export default class Home extends React.Component {
 		  .catch(function (error) {console.log(error)})
   	}  	
   	this.getContacts = () => {
-  		    return axios.get('https://www.google.com/m8/feeds/contacts/default/full?access_token=' + encodeURIComponent(this.props.user.services.google.accessToken) + "&alt=json&max-results=2000")
-    .then(function (resp) {console.log(resp.data.feed.entry)})
+  		return axios.get('https://www.google.com/m8/feeds/contacts/default/full?access_token=' + encodeURIComponent(this.props.user.services.google.accessToken) + "&alt=json&max-results=2000")
+    	.then(function (resp) {console.log(resp.data.feed.entry)})
   	}
   	return(
   		<div>
+  			{ Roles.userIsInRole(this.props.user, ['ras']) && <Link to="/admin">Admin</Link> }
   			<button onClick={this.getContacts}>Click</button>
   			<button onClick={this.getPhotos}>Click</button>
   		</div>

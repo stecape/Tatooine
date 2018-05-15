@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import Login from '../pages/Login'
+import Quattrocentotre from '../pages/Quattrocentotre'
 import Home from '../pages/Home'
+import Admin from '../pages/Admin'
 import Logout from '../components/Logout'
 import Loading from '../components/Loading'
-import { withTracker } from 'meteor/react-meteor-data';
+import { withTracker } from 'meteor/react-meteor-data'
 
 class App extends Component {
 	constructor(props){
@@ -33,6 +35,7 @@ class App extends Component {
 						<Logout user={this.props.user}/>
 						<Switch>
 	    				<Route exact path="/" render={() => {return <Home user={this.props.user}/>}} />
+	    				<Route path="/admin" render={() => { return (Roles.userIsInRole(this.props.user, ['ras']) ? <Admin /> : <Quattrocentotre />) }} />
 	    				<Route render={() => {return <div>404 - Page not found</div>}} />
 						</Switch>
 					</div>
@@ -47,7 +50,8 @@ class App extends Component {
   }
 }
 
-export default withTracker((props) => {
+export default withTracker((props) => 
+	
   return {
     loggingIn: Meteor.loggingIn(),
     hasUser: !!Meteor.user(),
@@ -63,5 +67,5 @@ export default withTracker((props) => {
       let USER = Meteor.user()
       return this.isPublic( this.props.location.pathname ) || ( !!USER ? USER.services.google.id == "103049458898347661484" : false )
     }
-  };
-})(App);
+  }
+})(App)
