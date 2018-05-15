@@ -2,7 +2,6 @@ import React from 'react'
 import { Meteor } from 'meteor/meteor'
 import { render } from 'react-dom'
 import { BrowserRouter, Route } from 'react-router-dom'
-import './useraccounts-configuration.js'
 
 import App from '../../ui/layouts/App'
 

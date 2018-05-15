@@ -8,6 +8,8 @@ export default class Login extends React.Component {
       Meteor.loginWithGoogle(
         {
           requestPermissions: [
+            "email",
+            "profile",
             "https://www.google.com/m8/feeds/",
             "https://www.googleapis.com/auth/photoslibrary.readonly",
             "https://www.googleapis.com/auth/drive.photos.readonly",

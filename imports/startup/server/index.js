@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor'
-import './publications.js'
+import '../../api/users.js'
 import { ServiceConfiguration } from 'meteor/service-configuration';
  
 Meteor.startup(() => {

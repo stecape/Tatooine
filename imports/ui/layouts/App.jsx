@@ -50,8 +50,7 @@ class App extends Component {
   }
 }
 
-export default withTracker((props) => 
-	
+export default withTracker((props) => {
   return {
     loggingIn: Meteor.loggingIn(),
     hasUser: !!Meteor.user(),
@@ -68,4 +67,4 @@ export default withTracker((props) =>
       return this.isPublic( this.props.location.pathname ) || ( !!USER ? USER.services.google.id == "103049458898347661484" : false )
     }
   }
-})(App)
+})(App);
