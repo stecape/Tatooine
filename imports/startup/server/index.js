@@ -1,14 +1,17 @@
 import { Meteor } from 'meteor/meteor'
 import '../../api/users.js'
+import '../../api/googleApiCalls.js'
 import { ServiceConfiguration } from 'meteor/service-configuration';
- 
+
 Meteor.startup(() => {
+
+//Google oauth configuration
 	ServiceConfiguration.configurations.upsert(
 	  { service: 'google' },
 	  {
   	  $set: {
-	    	clientId: "828427357877-bd7ckf1hb25vfq31jfg4veiobgh7gobd.apps.googleusercontent.com",
-	    	secret: "wwPVCvQoZSGOxvNg7SK8iZf6"
+	    	clientId: Meteor.settings.private.oAuth.google.clientId,
+	    	secret: Meteor.settings.private.oAuth.google.secret
       }
     }
 	)
@@ -18,5 +21,5 @@ Meteor.startup(() => {
 	//Se c'è almeno un altro amministratore, non accade niente.
 	var noAdminsYet = Meteor.users.find({roles: {  $in: ['ras'] }}).count() == 0
 	var users = Meteor.users.find({}, { sort: { createdAt: 1 } } )
-	noAdminsYet && users.count() > 0 && Roles.addUsersToRoles(users.fetch()[0]._id, ['ras'])
+	noAdminsYet && users.count() > 0 && Roles.setUserRoles(users.fetch()[0]._id, ['ras'])
 })

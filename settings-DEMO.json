@@ -1,0 +1,10 @@
+{
+  "private": {
+    "oAuth": {
+      "google": {
+        "clientId": "CLIENT_ID",
+        "secret": "CLIENT_SECRET"
+      }
+    }
+  }
+}

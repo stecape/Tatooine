@@ -2,7 +2,10 @@ import React from 'react'
 import '../styles/Login.css'
 
 export default class Login extends React.Component {
- 
+
+  //login page. button click -> Meteor.loginWithGoogle.
+  // scopes array, offline token and callback.
+  // the callback logs the error or tries initialize the role of the logged in user, if he is a new user.
   render () {
     this.login = () => {
       Meteor.loginWithGoogle(
@@ -10,15 +13,12 @@ export default class Login extends React.Component {
           requestPermissions: [
             "email",
             "profile",
-            "https://www.google.com/m8/feeds/",
-            "https://www.googleapis.com/auth/photoslibrary.readonly",
-            "https://www.googleapis.com/auth/drive.photos.readonly",
-            "https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata"
+            "https://www.google.com/m8/feeds/"
           ],
           requestOfflineToken: true
         },
         (error) => {
-          !!error ? console.log(error) : console.log(Meteor.user())
+          !!error ? console.log(error) : Meteor.call('initRole')
         }
       )
     }
@@ -32,3 +32,4 @@ export default class Login extends React.Component {
     )
   }
 }
+
