@@ -17,7 +17,6 @@ export default class User extends React.Component {
 	//when props changes I got to compare the previous state and the next props.
 	//you have to return null or an object that will be update the state.
 	static getDerivedStateFromProps(nextProps, prevState){
-		console.log(nextProps)
 		var changed = false
 		var _state = {
 			_id: prevState._id,
