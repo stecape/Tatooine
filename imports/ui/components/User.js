@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export default class User extends React.Component {
 
@@ -16,6 +17,7 @@ export default class User extends React.Component {
 	//when props changes I got to compare the previous state and the next props.
 	//you have to return null or an object that will be update the state.
 	static getDerivedStateFromProps(nextProps, prevState){
+		console.log(nextProps)
 		var changed = false
 		var _state = {
 			_id: prevState._id,
@@ -24,32 +26,26 @@ export default class User extends React.Component {
 			roles: prevState.roles
 		}
 		
-		if (nextProps.user._id !== prevState._id) {
-			_state._id= nextProps.user._id
+		if (nextProps._id !== prevState._id) {
+			_state._id= nextProps._id
 			changed = true
 		}
 
 		//I check the type because if the object isn't yet available, accessing his properties ends up with an error.
-		if (typeof nextProps.user.services !== 'undefined' && nextProps.user.services.google.name !== prevState.name) {
-			_state.name= nextProps.user.services.google.name
+		if (nextProps.name !== prevState.name) {
+			_state.name= nextProps.name
 			changed = true
 		}
 
 		//I check the type because if the object isn't yet available, accessing his properties ends up with an error.
-		if (typeof nextProps.user.services !== 'undefined' && nextProps.user.services.google.email !== prevState.email) {
-			_state.email= nextProps.user.services.google.email
+		if (nextProps.email !== prevState.email) {
+			_state.email= nextProps.email
 			changed = true
 		}
 		
 		//I check the type because if the object isn't yet available, accessing his properties ends up with an error.
-		if (typeof nextProps.user.roles !== 'undefined' && nextProps.user.roles !== prevState.roles) {
-			_state.roles= nextProps.user.roles
-			changed = true
-		}
-		
-		//If there isn't any role definded, I want to clear the radio.
-		if (typeof nextProps.user.roles == 'undefined' && nextProps.user.roles !== prevState.roles) {
-			_state.roles= []
+		if (nextProps.roles !== prevState.roles) {
+			_state.roles= nextProps.roles
 			changed = true
 		}
 
@@ -100,4 +96,18 @@ export default class User extends React.Component {
 			</tr>
 		)
 	}
+}
+
+User.propTypes = {
+	_id: PropTypes.string.isRequired,
+	name: PropTypes.string.isRequired,
+	email: PropTypes.string.isRequired,
+	roles: PropTypes.array.isRequired
+}
+
+User.defaultProps = {
+	_id: "",
+	name: "",
+	email: "",
+	roles: []
 }
