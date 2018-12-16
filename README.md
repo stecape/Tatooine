@@ -2,6 +2,7 @@
 cd app...
 meteor -s settings.json
 
+If myhome doesn't works correctly, try to use the myhome.js.txt instead.
 
 Photos call configuration (not working)
 
