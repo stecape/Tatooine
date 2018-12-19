@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Template from './Template/Template'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import Login from '../pages/Login'
 import Quattrocentotre from '../pages/Quattrocentotre'
@@ -35,22 +36,25 @@ class App extends Component {
     	}
     	{/*If someone isn't logging in anymore and there is a user logged shows the normal view*/}
 	    { !this.props.loggingIn && auth &&	
-				<BrowserRouter>
-					<div>
-						<Logout user={this.props.user}/>
-						<Switch>
-	    				<Route exact path="/" render={() => {return <Home user={this.props.user}/>}} />
-    	
-    					{/*Admin is a protected route, so if the user is a 'ras' Admin is loaded, else 403*/}
-	    				<Route path="/admin" render={() => { return (Roles.userIsInRole(this.props.user, ['ras']) ? <Admin /> : <Quattrocentotre />) }} />
 
-							{/*cmd is a protected route, so if the user is a 'ras' Admin is loaded, else 403*/}
-	    				<Route path="/Cmd/:cmd" render={(props) => { return (Roles.userIsInRole(this.props.user, ['ras', 'power user']) ? <Cmd {...props}/> : <Quattrocentotre />) }} />
+    				<BrowserRouter>
+    					<div>
+                <Template>
+      						<Logout user={this.props.user}/>
+      						<Switch>
+      	    				<Route exact path="/" render={() => {return <Home user={this.props.user}/>}} />
+          	
+          					{/*Admin is a protected route, so if the user is a 'ras' Admin is loaded, else 403*/}
+      	    				<Route path="/admin" render={() => { return (Roles.userIsInRole(this.props.user, ['ras']) ? <Admin /> : <Quattrocentotre />) }} />
 
-	    				<Route render={() => {return <div>404 - Page not found</div>}} />
-						</Switch>
-					</div>
-				</BrowserRouter>
+      							{/*cmd is a protected route, so if the user is a 'ras' Admin is loaded, else 403*/}
+      	    				<Route path="/Cmd/:cmd" render={(props) => { return (Roles.userIsInRole(this.props.user, ['ras', 'power user']) ? <Cmd {...props}/> : <Quattrocentotre />) }} />
+
+      	    				<Route render={() => {return <div>404 - Page not found</div>}} />
+      						</Switch>
+                </Template>
+    					</div>
+    				</BrowserRouter>
 			}
 
 			{/*if nobody is loggin in and nobody is logged in, show login screen*/}
@@ -69,4 +73,4 @@ export default withTracker((props) => {
     hasUser: !!Meteor.user(),
   	user: Meteor.user() ? Meteor.user() : {}
   }
-})(App);
+})(App)
