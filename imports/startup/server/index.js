@@ -11,8 +11,10 @@ Meteor.startup(() => {
 	  { service: 'google' },
 	  {
   	  $set: {
+  	  	loginStyle: 'redirect',
 	    	clientId: Meteor.settings.private.oAuth.google.clientId,
-	    	secret: Meteor.settings.private.oAuth.google.secret
+	    	secret: Meteor.settings.private.oAuth.google.secret,
+				accessType: 'offline'
       }
     }
 	)

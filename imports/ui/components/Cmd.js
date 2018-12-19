@@ -11,5 +11,6 @@ export default class Cmd extends React.Component {
         CMD > {cmd}
   		</div>
   	)
+
   }
 }
