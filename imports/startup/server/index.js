@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import '../../api/users.js'
 import '../../api/googleApiCalls.js'
 import { ServiceConfiguration } from 'meteor/service-configuration'
-import './OWNMethods.js'
+import './OWN/OWNMethods.js'
 
 Meteor.startup(() => {
 
@@ -14,7 +14,7 @@ Meteor.startup(() => {
   	  	loginStyle: 'redirect',
 	    	clientId: Meteor.settings.private.oAuth.google.clientId,
 	    	secret: Meteor.settings.private.oAuth.google.secret,
-				accessType: 'offline'
+			accessType: 'offline'
       }
     }
 	)
