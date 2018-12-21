@@ -9,6 +9,21 @@ import Cmd from '../components/Cmd'
 import Logout from '../components/Logout'
 import Loading from '../components/Loading'
 import { withTracker } from 'meteor/react-meteor-data'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#b71c1c',
+    },
+    secondary: {
+      main: '#9e9e9e',
+    }
+  },
+  typography: {
+    useNextVariants: true,
+  },
+})
 
 class App extends Component {
 	constructor(props){
@@ -38,7 +53,7 @@ class App extends Component {
 	    { !this.props.loggingIn && auth &&	
 
     				<BrowserRouter>
-    					<div>
+    					<MuiThemeProvider theme={theme}>
                 <Template>
       						<Logout user={this.props.user}/>
       						<Switch>
@@ -53,7 +68,7 @@ class App extends Component {
       	    				<Route render={() => {return <div>404 - Page not found</div>}} />
       						</Switch>
                 </Template>
-    					</div>
+    					</MuiThemeProvider>
     				</BrowserRouter>
 			}
 
