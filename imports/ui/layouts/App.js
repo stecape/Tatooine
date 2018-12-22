@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import Login from '../pages/Login'
 import Quattrocentotre from '../pages/Quattrocentotre'
 import Home from '../pages/Home'
+import Controls from '../pages/Controls'
 import Admin from '../pages/Admin'
 import Cmd from '../components/Cmd'
 import Logout from '../components/Logout'
@@ -54,13 +55,15 @@ class App extends Component {
 
     				<BrowserRouter>
     					<MuiThemeProvider theme={theme}>
-                <Template>
-      						<Logout user={this.props.user}/>
+                <Template auth={this.state.auth}>
       						<Switch>
       	    				<Route exact path="/" render={() => {return <Home user={this.props.user}/>}} />
           	
-          					{/*Admin is a protected route, so if the user is a 'ras' Admin is loaded, else 403*/}
-      	    				<Route path="/admin" render={() => { return (Roles.userIsInRole(this.props.user, ['ras']) ? <Admin /> : <Quattrocentotre />) }} />
+                    {/*Admin is a protected route, so if the user is a 'ras' Admin is loaded, else 403*/}
+                    <Route path="/controls" render={() => { return (Roles.userIsInRole(this.props.user, ['ras', 'power user']) ? <Controls /> : <Quattrocentotre />) }} />
+                    
+                    {/*Admin is a protected route, so if the user is a 'ras' Admin is loaded, else 403*/}
+                    <Route path="/admin" render={() => { return (Roles.userIsInRole(this.props.user, ['ras']) ? <Admin /> : <Quattrocentotre />) }} />
 
       							{/*cmd is a protected route, so if the user is a 'ras' Admin is loaded, else 403*/}
       	    				<Route path="/Cmd/:cmd" render={(props) => { return (Roles.userIsInRole(this.props.user, ['ras', 'power user']) ? <Cmd {...props}/> : <Quattrocentotre />) }} />

@@ -16,20 +16,39 @@ import InboxIcon from '@material-ui/icons/MoveToInbox'
 import MailIcon from '@material-ui/icons/Mail'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItems from './MenuItems'
 import { styles } from './TemplateStyles'
 
 class Template extends React.Component {
   state = {
     mobileOpen: false,
+    anchorEl: null,
   }
 
   handleDrawerToggle = () => {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }))
   }
 
+  handleMenu = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
+  Logout = () => {
+    this.handleClose()
+    Meteor.logout()
+  }
+
   render() {
     const { classes, theme } = this.props
+    const anchorEl = this.state.anchorEl
+    const open = Boolean(anchorEl);
 
 
     return (
@@ -45,9 +64,37 @@ class Template extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
-              Tatooine
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+              XHR9+W99
             </Typography>
+            {this.props.auth && (
+              <div>
+                <IconButton
+                  aria-owns={open ? 'menu-appbar' : undefined}
+                  aria-haspopup="true"
+                  onClick={this.handleMenu}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={open}
+                  onClose={this.handleClose}
+                >
+                  <MenuItem onClick={() => this.Logout()}>Logout</MenuItem>
+                </Menu>
+              </div>
+            )}
           </Toolbar>
         </AppBar>
         <nav className={classes.drawer}>

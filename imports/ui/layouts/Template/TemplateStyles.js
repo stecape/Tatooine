@@ -4,6 +4,9 @@ export const styles = theme => ({
   root: {
     display: 'flex',
   },
+  grow: {
+    flexGrow: 1,
+  },
   drawer: {
     [theme.breakpoints.up('sm')]: {
       width: drawerWidth,
@@ -17,6 +20,7 @@ export const styles = theme => ({
     },
   },
   menuButton: {
+    marginLeft: -12,
     marginRight: 20,
     [theme.breakpoints.up('sm')]: {
       display: 'none',
