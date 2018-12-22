@@ -19,11 +19,11 @@ mhengine.on ('monitoring', function () {
 //intercepting packets
 mhengine.on ('packet', Meteor.bindEnvironment((pkt)=>{
 
-  // Aggiungere il pacchetto allo stream, rimuovere quelli più vecchi di una settimana
-  Meteor.call('frames.insert', pkt)
+  // Se non è il pacchetto di alive ("*1*0*23##") aggiungi il pacchetto allo stream, rimuovi quelli più vecchi di una settimana
+  if (pkt != "*1*0*23##") Meteor.call('frames.insert', pkt)
 
-  // Se è luci aggiorna gli stati
-  Meteor.call('lights.update', pkt)
+  // Se è luci e non è il pacchetto di alive ("*1*0*23##") aggiorna gli stati
+  if (pkt != "*1*0*23##") Meteor.call('lights.update', pkt)
 
   // Se è temperatura aggiorna le temperature
   // Se è energia aggiorna i valori

@@ -16,7 +16,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox'
 import MailIcon from '@material-ui/icons/Mail'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
-import { menuItems } from './menuItems'
+import MenuItems from './MenuItems'
 import { styles } from './TemplateStyles'
 
 class Template extends React.Component {
@@ -51,7 +51,6 @@ class Template extends React.Component {
           </Toolbar>
         </AppBar>
         <nav className={classes.drawer}>
-          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
           <Hidden smUp implementation="css">
             <Drawer
               container={this.props.container}
@@ -64,7 +63,7 @@ class Template extends React.Component {
               }}
             >
               <div className={classes.toolbar} />
-              <List>{menuItems}</List>
+              <List><MenuItems /></List>
             </Drawer>
           </Hidden>
           <Hidden xsDown implementation="css">
@@ -76,7 +75,7 @@ class Template extends React.Component {
               open
             >
               <div className={classes.toolbar} />
-              <List>{menuItems}</List>
+              <List><MenuItems /></List>
             </Drawer>
           </Hidden>
         </nav>          
