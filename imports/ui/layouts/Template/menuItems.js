@@ -62,6 +62,7 @@ class Items extends React.Component {
             <ListItemText primary="Docs" />
           </ListItem>
         </NavLink>
+        { Roles.userIsInRole(this.props.user, ['ras']) && (
         <NavLink style={{ textDecoration: 'none' }} to ='/admin'>
           <ListItem button selected={this.isSelected("/admin")}>
             <ListItemIcon>
@@ -69,10 +70,9 @@ class Items extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Admin" />
           </ListItem>
-        </NavLink>
+        </NavLink> )}
       </div>
     )
   }
 }
 export default MenuItems = withRouter(Items)
-

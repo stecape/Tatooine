@@ -122,7 +122,7 @@ class Template extends React.Component {
               open
             >
               <div className={classes.toolbar} />
-              <List><MenuItems /></List>
+              <List><MenuItems user={this.props.user}/></List>
             </Drawer>
           </Hidden>
         </nav>          

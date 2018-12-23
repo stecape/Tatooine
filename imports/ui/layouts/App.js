@@ -30,14 +30,15 @@ class App extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			auth: this.props.hasUser
+			auth: this.props.hasUser,
+      user: this.props.user
 		}
 	}
 
 //keep state.auth update with the hasUser props provided by the HOC
 	static getDerivedStateFromProps(nextProps, prevState){
-	  if (nextProps.hasUser !== prevState.auth) {
-	    return { auth: nextProps.hasUser }
+	  if (nextProps !== prevState) {
+	    return { auth: nextProps.hasUser, user:nextProps.user }
 	  }
 	  return null
 	}
@@ -55,7 +56,7 @@ class App extends Component {
 
     				<BrowserRouter>
     					<MuiThemeProvider theme={theme}>
-                <Template auth={this.state.auth}>
+                <Template auth={this.state.auth} user={this.state.user}>
       						<Switch>
       	    				<Route exact path="/" render={() => {return <Home user={this.props.user}/>}} />
           	
