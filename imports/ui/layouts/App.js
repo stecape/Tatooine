@@ -56,9 +56,9 @@ class App extends Component {
 
     				<BrowserRouter>
     					<MuiThemeProvider theme={theme}>
-                <Template auth={this.state.auth} user={this.state.user}>
+                <Template>
       						<Switch>
-      	    				<Route exact path="/" render={() => {return <Home user={this.props.user}/>}} />
+      	    				<Route exact path="/" render={() => {return <Home authorized={Roles.userIsInRole(this.props.user, ['ras', 'power user'])} /> }} />
           	
                     {/*Admin is a protected route, so if the user is a 'ras' Admin is loaded, else 403*/}
                     <Route path="/controls" render={() => { return (Roles.userIsInRole(this.props.user, ['ras', 'power user']) ? <Controls /> : <Quattrocentotre />) }} />

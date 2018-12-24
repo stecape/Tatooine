@@ -7,10 +7,25 @@ import PlantsIcon from '@material-ui/icons/Whatshot'
 import TrendsIcon from '@material-ui/icons/Timeline'
 import DocsIcon from '@material-ui/icons/LibraryBooks'
 import AdminIcon from '@material-ui/icons/SupervisorAccount'
+import { withTracker } from 'meteor/react-meteor-data'
 
 import { withRouter, matchPath } from "react-router"
 
 class Items extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      user: this.props.user
+    }
+  }
+
+//keep state.auth update with the hasUser props provided by the HOC
+  static getDerivedStateFromProps(nextProps, prevState){
+    if (nextProps !== prevState) {
+      return { user:nextProps.user }
+    }
+    return null
+  }
   
 
   render(){
@@ -22,6 +37,7 @@ class Items extends React.Component {
     
     return (
       <div>
+        { Roles.userIsInRole(this.state.user, ['ras', 'power user', 'user']) && (
         <NavLink style={{ textDecoration: 'none' }} exact to ='/'>
           <ListItem button selected={this.isSelected("/", true)}>      
             <ListItemIcon>
@@ -29,7 +45,8 @@ class Items extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItem>
-        </NavLink>
+        </NavLink> )}
+        { Roles.userIsInRole(this.state.user, ['ras', 'power user']) && (
         <NavLink style={{ textDecoration: 'none' }} to ='/controls'>
           <ListItem button selected={this.isSelected("/controls")}>
             <ListItemIcon>
@@ -37,7 +54,8 @@ class Items extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Controls" />
           </ListItem>
-        </NavLink>
+        </NavLink> )}
+        { Roles.userIsInRole(this.state.user, ['ras', 'power user']) && (
         <NavLink style={{ textDecoration: 'none'  }} to ='/plants'>
           <ListItem button selected={this.isSelected("/plants")}>
             <ListItemIcon>
@@ -45,7 +63,8 @@ class Items extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Plants" />
           </ListItem>
-        </NavLink>
+        </NavLink> )}
+        { Roles.userIsInRole(this.state.user, ['ras', 'power user']) && (
         <NavLink style={{ textDecoration: 'none' }} to ='/trends'>
           <ListItem button selected={this.isSelected("/trends")}>
             <ListItemIcon>
@@ -53,7 +72,8 @@ class Items extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Trends" />
           </ListItem>
-        </NavLink>
+        </NavLink> )}
+        { Roles.userIsInRole(this.state.user, ['ras', 'power user']) && (
         <NavLink style={{ textDecoration: 'none' }} to ='/docs'>
           <ListItem button selected={this.isSelected("/docs")}>
             <ListItemIcon>
@@ -61,8 +81,8 @@ class Items extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Docs" />
           </ListItem>
-        </NavLink>
-        { Roles.userIsInRole(this.props.user, ['ras']) && (
+        </NavLink> )}
+        { Roles.userIsInRole(this.state.user, ['ras']) && (
         <NavLink style={{ textDecoration: 'none' }} to ='/admin'>
           <ListItem button selected={this.isSelected("/admin")}>
             <ListItemIcon>
@@ -75,4 +95,11 @@ class Items extends React.Component {
     )
   }
 }
-export default MenuItems = withRouter(Items)
+MenuItems = withRouter(Items)
+
+export default withTracker((props) => {
+  
+  return {
+    user: Meteor.user() ? Meteor.user() : {}
+  }
+})(MenuItems)

@@ -47,6 +47,14 @@ class Controls extends React.Component {
   	
   	const classes = this.props.classes
 
+		this.door = {
+		  name: "Apri porta",
+		  env: "3",
+		  light: "99",
+		  status: "1",
+		  type: "pulse",
+		}
+		
 		return(
 			<div>
 	  		<Typography variant="h5" color="inherit">
@@ -54,7 +62,7 @@ class Controls extends React.Component {
 	  		</Typography>
 	  		<br />
 	  		<Grid container spacing={24}>
-	        <Grid item md={4} sm={12}>
+	        <Grid item md={4} sm={12} xs={12}>
 	          <Paper className={classes.root} elevation={1}>
 	        		<Typography variant="h5" component="h3">
 	        		  Bagno, scala e ingresso
@@ -67,7 +75,7 @@ class Controls extends React.Component {
 	      		</Paper>
 	        </Grid>
 
-	        <Grid item md={4} sm={12}>
+	        <Grid item md={4} sm={12} xs={12}>
 	          <Paper className={classes.root} elevation={1}>
 	        		<Typography variant="h5" component="h3">
 	        		  Cucina, sala e studio
@@ -80,7 +88,7 @@ class Controls extends React.Component {
 	      		</Paper>
 	        </Grid>
 
-	        <Grid item md={4} sm={12}>
+	        <Grid item md={4} sm={12} xs={12}>
 	          <Paper className={classes.root} elevation={1}>
 	        		<Typography variant="h5" component="h3">
 	        		  Luci esterne e cantina
@@ -88,6 +96,7 @@ class Controls extends React.Component {
 				      <FormControl>
 				        <FormGroup>
 				        	{this.state.lights3.map(light => <Grid item xl={12} key={light.name}><Control data={light} /></Grid>)}
+				        	<Grid item xl={12} key="door"><Control data={this.door} override="*6*10*4001##"/></Grid>
 	        			</FormGroup>
 	      			</FormControl>
 	      		</Paper>
