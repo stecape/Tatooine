@@ -38,8 +38,8 @@ const LightList = [
   { "env" : "3", "light" : "5", "name": "Luce cantina grossa", "status" : "0", "type" : "switch" },
   { "env" : "3", "light" : "6", "name": "Luce centrale termica", "status" : "0", "type" : "switch" },
   { "env" : "3", "light" : "7", "name": "Luce scale cantina", "status" : "0", "type" : "switch" },
-  { "env" : "3", "light" : "8", "name": "Apri Cancello", "status" : "0", "type" : "pulse" },
-  { "env" : "3", "light" : "9", "name": "Apri Cancelletto", "status" : "0", "type" : "pulse" },
+  { "env" : "3", "light" : "8", "name": "Apri Cancelletto", "status" : "0", "type" : "pulse" },
+  { "env" : "3", "light" : "9", "name": "Apri Cancello", "status" : "0", "type" : "pulse" },
 ]
 
 //publishing lights data on server

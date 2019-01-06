@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import '../../api/users.js'
 import '../../api/googleApiCalls.js'
+import '../../api/meteo.js'
 import { ServiceConfiguration } from 'meteor/service-configuration'
 import './OWN/OWNMethods.js'
 
