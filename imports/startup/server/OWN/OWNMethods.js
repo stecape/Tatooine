@@ -26,6 +26,9 @@ mhengine.on ('packet', Meteor.bindEnvironment((pkt)=>{
   Meteor.call('lights.update', pkt)
 
   // Se è temperatura aggiorna le temperature
+  Meteor.call('temperatures.update', pkt)
+
+
   // Se è energia aggiorna i valori
 
 }))

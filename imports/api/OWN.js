@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor'
 
 export const OWNFrames = new Mongo.Collection('ownframes')
 export const Lights = new Mongo.Collection('lights')
+export const Temperatures = new Mongo.Collection('temperatures')
 
 
 const LightList = [
@@ -42,10 +43,29 @@ const LightList = [
   { "env" : "3", "light" : "9", "name": "Apri Cancello", "status" : "0", "type" : "pulse" },
 ]
 
+const TemperatureList = [
+  { "env" : "1", "light" : "5", "name": "unknown", "status" : "0", "type" : "switch" },
+  { "env" : "2", "light" : "6", "name": "unknown", "status" : "0", "type" : "switch" },
+  { "env" : "3", "light" : "10", "name": "unknown", "status" : "0", "type" : "switch" },
+  { "env" : "4", "light" : "11", "name": "unknown", "status" : "0", "type" : "switch" },
+  { "env" : "5", "light" : "11", "name": "unknown", "status" : "0", "type" : "switch" },
+  { "env" : "6", "light" : "11", "name": "unknown", "status" : "0", "type" : "switch" }
+]
+
 //publishing lights data on server
 if (Meteor.isServer) {
   Meteor.publish('lightsData', function () {
     var data = Lights.find()
+
+    if ( data ) {
+      return data
+    }
+
+    return this.ready()
+  })
+
+  Meteor.publish('temperaturesData', function () {
+    var data = Temperatures.find()
 
     if ( data ) {
       return data
@@ -68,10 +88,26 @@ if (Meteor.isServer) {
       }
     )
   })
+
+  TemperatureList.map(temperature => {
+    Temperatures.update(
+      {
+        env: temperature.env,
+        light: temperature.light
+      },
+      {
+        $set: temperature
+      },
+      {
+        upsert: true
+      }
+    )
+  })
 }
 
 if (Meteor.isClient) {
   Meteor.subscribe('lightsData')
+  Meteor.subscribe('temperaturesData')
 }
 
 Meteor.methods({
@@ -100,9 +136,9 @@ Meteor.methods({
     }
     var pktsplt = pkt.replace(/#/g,"").split("*")
     var frame = {
-    	who: pktsplt[1],
-    	what: pktsplt[2],
-    	where: pktsplt[3]
+      who: pktsplt[1],
+      what: pktsplt[2],
+      where: pktsplt[3]
     }
     if (frame.who == "1") {
       if (frame.where.length == 2){
@@ -129,6 +165,44 @@ Meteor.methods({
         }
       )
 
-	  }
+    }
+  },
+
+  'temperatures.update'(pkt) {
+    if (Meteor.isClient) {
+      throw new Meteor.Error('not-authorized')
+    }
+    var pktsplt = pkt.replace(/#/g,"").split("*")
+    var frame = {
+      who: pktsplt[1],
+      what: pktsplt[2],
+      where: pktsplt[3]
+    }
+    if (frame.who == "4") {
+      if (frame.where.length == 2){
+        var env = frame.where[0]
+        var light = frame.where[1]  
+      } 
+      if (frame.where.length == 4) {
+        var env = frame.where.substring(0, 2)
+        var light = frame.where.substring(2, 4)
+      }
+
+      Lights.update(
+        {
+          env: env,
+          light: light
+        },
+        {
+          $set: {
+            status: frame.what
+          }
+        },
+        {
+          upsert: true
+        }
+      )
+
+    }
   }
 })
