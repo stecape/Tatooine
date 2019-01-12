@@ -44,12 +44,11 @@ const LightList = [
 ]
 
 const TemperatureList = [
-  { "env" : "1", "light" : "5", "name": "unknown", "status" : "0", "type" : "switch" },
-  { "env" : "2", "light" : "6", "name": "unknown", "status" : "0", "type" : "switch" },
-  { "env" : "3", "light" : "10", "name": "unknown", "status" : "0", "type" : "switch" },
-  { "env" : "4", "light" : "11", "name": "unknown", "status" : "0", "type" : "switch" },
-  { "env" : "5", "light" : "11", "name": "unknown", "status" : "0", "type" : "switch" },
-  { "env" : "6", "light" : "11", "name": "unknown", "status" : "0", "type" : "switch" }
+  { "env" : "1", "set" : "5", "act" : "5", "name": "Studio", "status" : "0"},
+  { "env" : "2", "set" : "6", "act" : "5", "name": "Ingresso", "status" : "0"},
+  { "env" : "3", "set" : "10", "act" : "5", "name": "Bagno", "status" : "0"},
+  { "env" : "4", "set" : "11", "act" : "5", "name": "Cucina", "status" : "0"},
+  { "env" : "5", "set" : "11", "act" : "5", "name": "Sala", "status" : "0"}
 ]
 
 //publishing lights data on server
@@ -92,8 +91,7 @@ if (Meteor.isServer) {
   TemperatureList.map(temperature => {
     Temperatures.update(
       {
-        env: temperature.env,
-        light: temperature.light
+        env: temperature.env
       },
       {
         $set: temperature
@@ -168,41 +166,88 @@ Meteor.methods({
     }
   },
 
+  'temperatures.getData' () {
+    var cmds = [
+      "*#4*1*14##",    //SET_PROBE1   *#4*where*14*T*3##
+      "*#4*2*14##",    //SET_PROBE2   
+      "*#4*3*14##",    //SET_PROBE3   
+      "*#4*4*14##",    //SET_PROBE4   
+      "*#4*5*14##",    //SET_PROBE5   
+      "*#4*1*0##",     //ACT_PROBE1   *#4*where*0*T##
+      "*#4*2*0##",     //ACT_PROBE2   
+      "*#4*3*0##",     //ACT_PROBE3   
+      "*#4*4*0##",     //ACT_PROBE4   
+      "*#4*5*0##",     //ACT_PROBE5   
+      "*#4*1*19##",    //VALVE_PROBE1 *#4*where*19*CV*HV##
+      "*#4*2*19##",    //VALVE_PROBE2 
+      "*#4*3*19##",    //VALVE_PROBE3 
+      "*#4*4*19##",    //VALVE_PROBE4 
+      "*#4*5*19##"     //VALVE_PROBE5 
+    ]
+    cmds.map((cmd) => Meteor.call("SendOWNCommand", cmd))
+
+  },
+
   'temperatures.update'(pkt) {
     if (Meteor.isClient) {
       throw new Meteor.Error('not-authorized')
     }
     var pktsplt = pkt.replace(/#/g,"").split("*")
-    var frame = {
-      who: pktsplt[1],
-      what: pktsplt[2],
-      where: pktsplt[3]
-    }
-    if (frame.who == "4") {
-      if (frame.where.length == 2){
-        var env = frame.where[0]
-        var light = frame.where[1]  
-      } 
-      if (frame.where.length == 4) {
-        var env = frame.where.substring(0, 2)
-        var light = frame.where.substring(2, 4)
+    if (pktsplt[1] == "4") {
+  
+      var frame = {
+        who: pktsplt[1],
+        where: pktsplt[2],
+        what: pktsplt[3] 
+      }
+  
+      if (frame.what == "0") {
+        Temperatures.update(
+          {
+            env: frame.where
+          },
+          {
+            $set: {
+              act: pktsplt[4]/10
+            }
+          },
+          {
+            upsert: true
+          }
+        )
       }
 
-      Lights.update(
-        {
-          env: env,
-          light: light
-        },
-        {
-          $set: {
-            status: frame.what
+      if (frame.what == "14") {
+        Temperatures.update(
+          {
+            env: frame.where
+          },
+          {
+            $set: {
+              set: pktsplt[4]/10
+            }
+          },
+          {
+            upsert: true
           }
-        },
-        {
-          upsert: true
-        }
-      )
+        )
+      }
 
+      if (frame.what == "19") {
+        Temperatures.update(
+          {
+            env: frame.where
+          },
+          {
+            $set: {
+              status: pktsplt[5]/1
+            }
+          },
+          {
+            upsert: true
+          }
+        )
+      }
     }
   }
 })

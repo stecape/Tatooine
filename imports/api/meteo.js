@@ -29,12 +29,13 @@ if (Meteor.isServer) {
   })
 
   //Start sampling meteor data each 5 minutes: setInterval each 1 minute, if getTime.minute is *5 or *0 add a sample
-  setInterval(() => {
+  Meteor.setInterval(() => {
 
     //the following condition takes the actual date, generates the actual minute and retrives only the last digit of the minute.
     //If the digit is included in the array of valid values ["4", "9"], then it performs the async req to update the clima.    
     if (["4", "9"].includes(new Date().getMinutes().toString().substr(new Date().getMinutes().toString().length -1))) {
       // Ask for Clima data refreshing before the sampling activity
+      Meteor.call('temperatures.getData')
     }
 
     //the following condition takes the actual date, generates the actual minute and retrives only the last digit of the minute.
@@ -53,7 +54,7 @@ if (Meteor.isServer) {
         //Store clima information in the DB
       })
     }
-  }, 1000*60)
+  }, 60000)
 }
 
 if (Meteor.isClient) {
@@ -62,6 +63,7 @@ if (Meteor.isClient) {
 }
 
 Meteor.methods({
+
   'meteo.insert'(data) {
     if (Meteor.isClient) {
       throw new Meteor.Error('not-authorized')
