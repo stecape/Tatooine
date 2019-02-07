@@ -3,23 +3,12 @@ import axios from 'axios'
 import { Mongo } from 'meteor/mongo'
 import { Meteor } from 'meteor/meteor'
 
-export const Meteo = new Mongo.Collection('meteo')
-export const Clima = new Mongo.Collection('clima')
+export const Actual = new Mongo.Collection('actual')
 
 //publishing meteo data on server
 if (Meteor.isServer) {
-  Meteor.publish('meteoData', function () {
-    var data = Meteo.find()
-
-    if ( data ) {
-      return data
-    }
-
-    return this.ready()
-  })
-
-  Meteor.publish('climaData', function () {
-    var data = Clima.find()
+  Meteor.publish('actualData', function () {
+    var data = Actual.find()
 
     if ( data ) {
       return data
@@ -33,10 +22,11 @@ if (Meteor.isServer) {
 
     //the following condition takes the actual date, generates the actual minute and retrives only the last digit of the minute.
     //If the digit is included in the array of valid values ["4", "9"], then it performs the async req to update the clima.    
-    if (["4", "9"].includes(new Date().getMinutes().toString().substr(new Date().getMinutes().toString().length -1))) {
+    //if (["4", "9"].includes(new Date().getMinutes().toString().substr(new Date().getMinutes().toString().length -1))) {
       // Ask for Clima data refreshing before the sampling activity
       Meteor.call('temperatures.getData')
-    }
+      //Meteor.call('clima.insert', response.data.stations.ISANSALV27)
+    //}
 
     //the following condition takes the actual date, generates the actual minute and retrives only the last digit of the minute.
     //If the digit is included in the array of valid values ["0", "5"], then it performs the async req to update the meteo. 
@@ -58,8 +48,7 @@ if (Meteor.isServer) {
 }
 
 if (Meteor.isClient) {
-  Meteor.subscribe('meteoData')
-  Meteor.subscribe('climaData')
+  Meteor.subscribe('actualData')
 }
 
 Meteor.methods({
@@ -84,7 +73,11 @@ Meteor.methods({
       windchill: data.windchill
     }
     //Insert the new sample
-    Meteo.insert(formattedData)
+    Actual.update(
+      { vars: "External Temperatures" },
+      { $set: { data: formattedData }},
+      { upsert: true }
+    )
   },
 
   'clima.insert'(data) {
@@ -94,19 +87,17 @@ Meteor.methods({
 
     //Format the new sample
     const formattedData = { 
-      ts: data.updated,
-      wind_dir_degrees: data.wind_dir_degrees,
-      wind_speed: data.wind_speed,
-      wind_gust_speed: data.wind_gust_speed,
-      humidity: data.humidity,
-      temperature: data.temperature,
-      precip_rate: data.precip_rate,
-      precip_today: data.precip_today,
-      pressure: data.pressure,
-      dewpoint: data.dewpoint,
-      windchill: data.windchill
+      env: data.env,
+      set: data.set,
+      act: data.act,
+      name: data.name,
+      status: data.status
     }
     //Insert the new sample
-    Clima.insert(formattedData)
+    Actual.update(
+      { vars: "Internal Temperatures" },
+      { $set: { data: formattedData }},
+      { upsert: true }
+    )
   },
 })

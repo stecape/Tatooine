@@ -2,8 +2,7 @@ import { Mongo } from 'meteor/mongo'
 import { Meteor } from 'meteor/meteor'
 
 export const OWNFrames = new Mongo.Collection('ownframes')
-export const Lights = new Mongo.Collection('lights')
-export const Temperatures = new Mongo.Collection('temperatures')
+export const Actual = new Mongo.Collection('actual')
 
 
 const LightList = [
@@ -44,11 +43,12 @@ const LightList = [
 ]
 
 const TemperatureList = [
-  { "env" : "1", "set" : "5", "act" : "5", "name": "Studio", "status" : "0"},
-  { "env" : "2", "set" : "6", "act" : "5", "name": "Ingresso", "status" : "0"},
-  { "env" : "3", "set" : "10", "act" : "5", "name": "Bagno", "status" : "0"},
-  { "env" : "4", "set" : "11", "act" : "5", "name": "Cucina", "status" : "0"},
-  { "env" : "5", "set" : "11", "act" : "5", "name": "Sala", "status" : "0"}
+  { "env" : "1", "set" : "0.0", "act" : "0.0", "name": "Studio", "status" : "0"},
+  { "env" : "2", "set" : "0.0", "act" : "0.0", "name": "Ingresso", "status" : "0"},
+  { "env" : "3", "set" : "0.0", "act" : "0.0", "name": "Bagno", "status" : "0"},
+  { "env" : "4", "set" : "0.0", "act" : "0.0", "name": "Cucina", "status" : "0"},
+  { "env" : "5", "set" : "0.0", "act" : "0.0", "name": "Sala", "status" : "0"},
+  { "env" : "6", "set" : "0.0", "act" : "0.0", "name": "1P", "status" : "0"}
 ]
 
 //publishing lights data on server
@@ -76,25 +76,16 @@ if (Meteor.isServer) {
   LightList.map(light => {
     Lights.update(
       {
+        vars: "Lights",
         env: light.env,
         light: light.light
       },
       {
-        $set: light
-      },
-      {
-        upsert: true
-      }
-    )
-  })
-
-  TemperatureList.map(temperature => {
-    Temperatures.update(
-      {
-        env: temperature.env
-      },
-      {
-        $set: temperature
+        $set: {data: (light) => {
+            //Find index of specific object using findIndex method.    
+            objIndex = myArray.findIndex((obj => obj.id == 1));
+          }
+        }
       },
       {
         upsert: true
