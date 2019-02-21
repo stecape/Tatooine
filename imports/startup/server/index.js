@@ -27,4 +27,5 @@ Meteor.startup(() => {
 	var users = Meteor.users.find({}, { sort: { createdAt: 1 } } )
 	noAdminsYet && users.count() > 0 && Roles.setUserRoles(users.fetch()[0]._id, ['ras'])
 
+
 })

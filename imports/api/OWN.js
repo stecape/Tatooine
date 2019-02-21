@@ -1,9 +1,11 @@
-import { Mongo } from 'meteor/mongo'
+import { Mongo }  from 'meteor/mongo'
 import { Meteor } from 'meteor/meteor'
 
 export const OWNFrames = new Mongo.Collection('ownframes')
-export const Actual = new Mongo.Collection('actual')
-
+export const Lights = new Mongo.Collection('lights')
+export const Temperatures = new Mongo.Collection('temperatures')
+export const HistLights = new Mongo.Collection('histLights')
+export const HistTemperatures = new Mongo.Collection('histTemperatures')
 
 const LightList = [
   { "env" : "0", "light" : "1", "name": "unknown", "status" : "0", "type" : "switch" },
@@ -53,16 +55,6 @@ const TemperatureList = [
 
 //publishing lights data on server
 if (Meteor.isServer) {
-  Meteor.publish('lightsData', function () {
-    var data = Lights.find()
-
-    if ( data ) {
-      return data
-    }
-
-    return this.ready()
-  })
-
   Meteor.publish('temperaturesData', function () {
     var data = Temperatures.find()
 
@@ -72,31 +64,67 @@ if (Meteor.isServer) {
 
     return this.ready()
   })
+  Meteor.publish('lightsData', function () {
+    var data = Lights.find()
 
+    if ( data ) {
+      return data
+    }
+
+    return this.ready()
+  })
+  Meteor.publish('histTemperaturesData', function () {
+    var data = HistTemperatures.find()
+
+    if ( data ) {
+      return data
+    }
+
+    return this.ready()
+  })
+  Meteor.publish('histLightsData', function () {
+    var data = HistLights.find()
+
+    if ( data ) {
+      return data
+    }
+
+    return this.ready()
+  })
+
+  //Questo va modificato in modo che se esiste già qualcosa non deve fare l'update
   LightList.map(light => {
     Lights.update(
-      {
-        vars: "Lights",
-        env: light.env,
-        light: light.light
-      },
-      {
-        $set: {data: (light) => {
-            //Find index of specific object using findIndex method.    
-            objIndex = myArray.findIndex((obj => obj.id == 1));
-          }
-        }
-      },
-      {
-        upsert: true
-      }
+      { env: light.env, light: light.light },
+      { $set: { 
+          env : light.env,
+          light : light.light,
+          name: light.name,
+          status : light.status,
+          type : light.type
+      } },
+      { upsert: true }
+    )
+  })
+
+  TemperatureList.map(temperature => {
+    Temperatures.update(
+      { env: temperature.env },
+      { $set: { 
+          name: temperature.name,
+          env : temperature.env,
+          set : temperature.set,
+          act : temperature.act,
+          status : temperature.status
+      } },
+      { upsert: true }
     )
   })
 }
 
 if (Meteor.isClient) {
-  Meteor.subscribe('lightsData')
   Meteor.subscribe('temperaturesData')
+  Meteor.subscribe('lightsData')
 }
 
 Meteor.methods({
@@ -140,21 +168,22 @@ Meteor.methods({
       }
 
       Lights.update(
-        {
-          env: env,
-          light: light
-        },
-        {
-          $set: {
-            status: frame.what
-          }
-        },
-        {
-          upsert: true
-        }
+        { env: env, light: light },
+        { $set: { 
+            status : frame.what
+        } },
+        { upsert: true }
       )
 
     }
+  },
+
+  'lights.getData' () {
+    var cmds = [
+      "*#1*0##"       //ALL_LIGHTS_DATA 
+    ]
+    cmds.map((cmd) => Meteor.call("SendOWNCommand", cmd))
+
   },
 
   'temperatures.getData' () {
@@ -194,51 +223,51 @@ Meteor.methods({
   
       if (frame.what == "0") {
         Temperatures.update(
-          {
-            env: frame.where
-          },
-          {
-            $set: {
-              act: pktsplt[4]/10
-            }
-          },
-          {
-            upsert: true
-          }
+          { env: frame.where },
+          { $set: { act : pktsplt[4]/10 } },
+          { upsert: true }
         )
       }
 
       if (frame.what == "14") {
         Temperatures.update(
-          {
-            env: frame.where
-          },
-          {
-            $set: {
-              set: pktsplt[4]/10
-            }
-          },
-          {
-            upsert: true
-          }
+          { env: frame.where },
+          { $set: { set : pktsplt[4]/10 } },
+          { upsert: true }
         )
       }
 
       if (frame.what == "19") {
         Temperatures.update(
-          {
-            env: frame.where
-          },
-          {
-            $set: {
-              status: pktsplt[5]/1
-            }
-          },
-          {
-            upsert: true
-          }
+          { env: frame.where },
+          { $set: { status : pktsplt[5]/1 } },
+          { upsert: true }
         )
       }
     }
+  },
+
+  'histLights.insert'() {
+    if (Meteor.isClient) {
+      throw new Meteor.Error('not-authorized')
+    }
+    console.log("HistLights insert")
+    //Insert the new pkg
+    // HistLights.insert({
+    //   data: Lights.find(),
+    //   ts: new Date()
+    // })    
+  },
+
+  'histTemperatures.insert'() {
+    if (Meteor.isClient) {
+      throw new Meteor.Error('not-authorized')
+    }
+    console.log("HistTemperatures insert")
+    //Insert the new pkg
+    // HistTemperatures.insert({
+    //   data: Temperatures.find(),
+    //   ts: new Date()
+    // })   
   }
 })
