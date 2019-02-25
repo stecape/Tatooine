@@ -1,5 +1,3 @@
-import '../../../api/OWN'
-import '../../../api/meteo'
 import { Meteor } from 'meteor/meteor'
 import axios from 'axios'
 
@@ -23,15 +21,7 @@ mhengine.on ('monitoring', Meteor.bindEnvironment((pkt)=>{
   Meteor.call('temperatures.getData')
 
   // Aggiorna il DB del meteo all'avvio della sessione
-  axios.get("https://stationdata.wunderground.com/cgi-bin/stationlookup?station=ISANSALV27&units=metric&v=2.0&format=json")
-      .then((response) => {
-        //when the data arrives we updates the database:
-        Meteor.call('meteo.set', response.data.stations.ISANSALV27)
-      })
-      .catch((e) => {
-        console.log(e)
-        Meteor.call('meteo.set', [{"wind_dir_degrees":0,"wind_speed":0,"wind_gust_speed":0,"humidity":0,"temperature":0.0,"precip_rate":0,"precip_today":0,"pressure":0.0, "dewpoint":null,"windchill":0.0}])
-      })
+  Meteor.call('meteo.getData')
 }))
 
 //intercepting packets

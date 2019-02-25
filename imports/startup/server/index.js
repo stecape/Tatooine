@@ -1,10 +1,12 @@
 import { Meteor } from 'meteor/meteor'
-import '../../api/users.js'
-import '../../api/googleApiCalls.js'
-import '../../api/meteo.js'
+import '../../api/users'
+import '../../api/meteo'
+import '../../api/OWNFrames'
+import '../../api/lights'
+import '../../api/temperatures'
 import { ServiceConfiguration } from 'meteor/service-configuration'
-import './OWN/OWNMethods.js'
-
+import '../../api/F454Driver'
+import '../../api/scheduler'
 Meteor.startup(() => {
 
 //Google oauth configuration
@@ -15,7 +17,7 @@ Meteor.startup(() => {
   	  	loginStyle: 'redirect',
 	    	clientId: Meteor.settings.private.oAuth.google.clientId,
 	    	secret: Meteor.settings.private.oAuth.google.secret,
-			accessType: 'offline'
+			  accessType: 'offline'
       }
     }
 	)
