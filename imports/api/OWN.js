@@ -251,23 +251,27 @@ Meteor.methods({
     if (Meteor.isClient) {
       throw new Meteor.Error('not-authorized')
     }
-    console.log("HistLights insert")
+    //console.log("HistLights insert")
     //Insert the new pkg
-    // HistLights.insert({
-    //   data: Lights.find(),
-    //   ts: new Date()
-    // })    
+    var data = {
+      ts: new Date(),
+      data: Lights.find().fetch()
+    }
+    //console.log(data)
+    HistLights.insert(data)    
   },
 
   'histTemperatures.insert'() {
     if (Meteor.isClient) {
       throw new Meteor.Error('not-authorized')
     }
-    console.log("HistTemperatures insert")
+    //console.log("HistTemperatures insert")
     //Insert the new pkg
-    // HistTemperatures.insert({
-    //   data: Temperatures.find(),
-    //   ts: new Date()
-    // })   
+    var data = {
+      ts: new Date(),
+      data: Temperatures.find().fetch()
+    }
+    //console.log(data)
+    HistTemperatures.insert(data)   
   }
 })

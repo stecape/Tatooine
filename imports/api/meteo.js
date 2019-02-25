@@ -63,7 +63,7 @@ if (Meteor.isServer) {
         Meteor.call('histMeteo.insert')
       })
     //}
-  }, 10000)
+  }, 20000)
 }
 
 if (Meteor.isClient) {
@@ -101,13 +101,13 @@ Meteor.methods({
     if (Meteor.isClient) {
       throw new Meteor.Error('not-authorized')
     }
-    console.log("HistMeteo insert")
+    //console.log("HistMeteo insert")
     //Insert the new pkg
-    var data = Meteo.find().fetch()
-    console.log(data)
-    // HistMeteo.insert({
-    //   data: data,
-    //   ts: new Date()
-    // })
+    var data = {
+      ts: new Date(),
+      data: Meteo.find().fetch()
+    }
+    //console.log(data)
+    HistMeteo.insert(data)
   },
 })
