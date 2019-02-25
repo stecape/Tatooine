@@ -49,9 +49,6 @@ Meteor.methods({
       .then(() => {
         //Store lights, temperatures and meteo historical information in the DB -> temperatures.insert, meteo.insert
         meteoEmitter.emit('meteoCallback')
-        Meteor.call('histLights.insert')
-        Meteor.call('histTemperatures.insert')
-        Meteor.call('histMeteo.insert')
       })
   },
 

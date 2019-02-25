@@ -7,6 +7,7 @@ import '../../api/temperatures'
 import { ServiceConfiguration } from 'meteor/service-configuration'
 import '../../api/F454Driver'
 import '../../api/scheduler'
+
 Meteor.startup(() => {
 
 //Google oauth configuration

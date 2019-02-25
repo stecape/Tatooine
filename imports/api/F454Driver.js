@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor'
-import axios from 'axios'
 
 // creating OWN connection to the F454
 var myhome = require('myhome')
