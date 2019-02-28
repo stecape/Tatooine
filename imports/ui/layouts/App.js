@@ -5,6 +5,7 @@ import Login from '../pages/Login'
 import Quattrocentotre from '../pages/Quattrocentotre'
 import Home from '../pages/Home'
 import Controls from '../pages/Controls'
+import Trends from '../pages/Trends'
 import Admin from '../pages/Admin'
 import Cmd from '../components/Cmd'
 import Logout from '../components/Logout'
@@ -60,9 +61,12 @@ class App extends Component {
       						<Switch>
       	    				<Route exact path="/" render={() => {return <Home authorized={Roles.userIsInRole(this.props.user, ['ras', 'power user'])} /> }} />
           	
-                    {/*Admin is a protected route, so if the user is a 'ras' Admin is loaded, else 403*/}
-                    <Route path="/controls" render={() => { return (Roles.userIsInRole(this.props.user, ['ras', 'power user']) ? <Controls /> : <Quattrocentotre />) }} />
-                    
+                    {/*Controls is a protected route, so if the user is a 'ras' or a 'Power User' then Controls is loaded, else 403*/}
+                    <Route path="/controls" render={() => { return (Roles.userIsInRole(this.props.user, ['ras', 'power user']) ? <Controls /> : <Quattrocentotre />) }} />                    
+
+                    {/*Trends is a protected route, so if the user is a 'ras' or a 'Power User' then Trends is loaded, else 403*/}
+                    <Route path="/trends" render={() => { return (Roles.userIsInRole(this.props.user, ['ras', 'power user']) ? <Trends /> : <Quattrocentotre />) }} />
+            
                     {/*Admin is a protected route, so if the user is a 'ras' Admin is loaded, else 403*/}
                     <Route path="/admin" render={() => { return (Roles.userIsInRole(this.props.user, ['ras']) ? <Admin /> : <Quattrocentotre />) }} />
 

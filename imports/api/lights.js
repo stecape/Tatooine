@@ -78,10 +78,10 @@ if (Meteor.isServer) {
   })
 }
 
-if (Meteor.isClient) {
-  Meteor.subscribe('lightsData')
-  Meteor.subscribe('histLightsData')
-}
+// if (Meteor.isClient) {
+//   Meteor.subscribe('lightsData')
+//   Meteor.subscribe('histLightsData')
+// }
 
 
 Meteor.methods({

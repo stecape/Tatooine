@@ -28,10 +28,10 @@ if (Meteor.isServer) {
   })
 }
 
-if (Meteor.isClient) {
-  Meteor.subscribe('meteoData')
-  Meteor.subscribe('histMeteoData')
-}
+// if (Meteor.isClient) {
+//   Meteor.subscribe('meteoData')
+//   Meteor.subscribe('histMeteoData')
+// }
 
 Meteor.methods({
 

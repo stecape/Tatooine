@@ -16,9 +16,9 @@ if (Meteor.isServer) {
   })
 }
 
-if (Meteor.isClient) {
-  Meteor.subscribe('ownframesData')
-}
+// if (Meteor.isClient) {
+//   Meteor.subscribe('ownframesData')
+// }
 
 Meteor.methods({
   'frames.insert'(pkt) {

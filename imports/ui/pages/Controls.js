@@ -8,7 +8,7 @@ import Switch from '@material-ui/core/Switch'
 import FormControl from '@material-ui/core/FormControl'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import { Lights } from '../../api/OWNFrames'
+import { Lights } from '../../api/lights'
 import Control from '../components/Control'
 import { withTracker } from 'meteor/react-meteor-data'
 
@@ -112,6 +112,9 @@ Controls.propTypes = {
 }
 
 Controls = withStyles(styles, {name: 'Controls'})(Controls)
+
+Meteor.subscribe('lightsData')
+
 export default withTracker((props) => {
   return {
 		lights1: Lights.find({env: { $in: ["1", "01"]}}).fetch(),

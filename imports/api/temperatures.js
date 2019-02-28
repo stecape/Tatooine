@@ -42,19 +42,19 @@ if (Meteor.isServer) {
       { $set: { 
           name: temperature.name,
           env : temperature.env,
-          set : temperature.set,
-          act : temperature.act,
-          status : temperature.status
+          set : Number(temperature.set),
+          act : Number(temperature.act),
+          status : Number(temperature.status)*100
       } },
       { upsert: true }
     )
   })
 }
 
-if (Meteor.isClient) {
-  Meteor.subscribe('temperaturesData')
-  Meteor.subscribe('histTemperaturesData')
-}
+// if (Meteor.isClient) {
+//   Meteor.subscribe('temperaturesData')
+//   Meteor.subscribe('histTemperaturesData')
+// }
 
 
 Meteor.methods({
@@ -96,7 +96,7 @@ Meteor.methods({
       if (frame.what == "0") {
         Temperatures.update(
           { env: frame.where },
-          { $set: { act : pktsplt[4]/10 } },
+          { $set: { act : Number(pktsplt[4]/10) } },
           { upsert: true }
         )
       }
@@ -104,7 +104,7 @@ Meteor.methods({
       if (frame.what == "14") {
         Temperatures.update(
           { env: frame.where },
-          { $set: { set : pktsplt[4]/10 } },
+          { $set: { set : Number(pktsplt[4]/10) } },
           { upsert: true }
         )
       }
@@ -112,7 +112,7 @@ Meteor.methods({
       if (frame.what == "19") {
         Temperatures.update(
           { env: frame.where },
-          { $set: { status : pktsplt[5]/1 } },
+          { $set: { status : Number(pktsplt[5]/1)*100 } },
           { upsert: true }
         )
       }
