@@ -160,8 +160,8 @@ export default HighChartsContainer = withTracker((props) => {
   Meteor.subscribe('histTemperaturesData')
   Meteor.subscribe('histMeteoData')
   return {
-    histTemperatures: HistTemperatures.find({ts: {$gte: new Date(new Date().setDate(new Date().getDate()-1)), $lte: new Date()}}).fetch(),
-    histMeteo: HistMeteo.find({ts: {$gte: new Date(new Date().setDate(new Date().getDate()-1)), $lte: new Date()}}).fetch(),
+    histTemperatures: HistTemperatures.find({ts: {$gte: new Date(new Date().setDate(new Date().getDate()-1))}}).fetch(),
+    histMeteo: HistMeteo.find({ts: {$gte: new Date(new Date().setDate(new Date().getDate()-1))}}).fetch(),
     detail: "highest"
   }
 })(ChartComponentContainer)
