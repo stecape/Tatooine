@@ -29,7 +29,27 @@ class Trends extends React.Component {
         <Grid container spacing={24}>
           <Grid item md={12} sm={12} xs={12}>
             <Paper className={classes.root} elevation={1}>
-              <ChartComponent />
+              <ChartComponent room="Bagno" />
+            </Paper>
+          </Grid>
+          <Grid item md={12} sm={12} xs={12}>
+            <Paper className={classes.root} elevation={1}>
+              <ChartComponent room="Cucina" />
+            </Paper>
+          </Grid>
+          <Grid item md={12} sm={12} xs={12}>
+            <Paper className={classes.root} elevation={1}>
+              <ChartComponent room="Sala" />
+            </Paper>
+          </Grid>
+          <Grid item md={12} sm={12} xs={12}>
+            <Paper className={classes.root} elevation={1}>
+              <ChartComponent room="Studio" />
+            </Paper>
+          </Grid>
+          <Grid item md={12} sm={12} xs={12}>
+            <Paper className={classes.root} elevation={1}>
+              <ChartComponent room="Ingresso" />
             </Paper>
           </Grid>
         </Grid>

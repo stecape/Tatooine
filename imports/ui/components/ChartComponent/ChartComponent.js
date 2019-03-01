@@ -38,19 +38,19 @@ class ChartComponent extends React.Component {
     )
     var tempSet = getDataSeries(
       nextProps.histTemperatures,
-      "Bagno",
+      nextProps.room,
       "set",
       nextProps.detail
     )
     var tempAct = getDataSeries(
       nextProps.histTemperatures,
-      "Bagno",
+      nextProps.room,
       "act",
       nextProps.detail
     )
     var valve = getDataSeries(
       nextProps.histTemperatures,
-      "Bagno",
+      nextProps.room,
       "status",
       nextProps.detail
     )
@@ -72,7 +72,7 @@ class ChartComponent extends React.Component {
       <HighchartsChart time={{useUTC: false}} className="chart" id="chartComponent" >
         <Chart />
 
-        <Title>Room Temperature</Title>
+        <Title>{this.props.room}</Title>
 
         <Tooltip 
           distance={30}
@@ -160,8 +160,8 @@ export default HighChartsContainer = withTracker((props) => {
   Meteor.subscribe('histTemperaturesData')
   Meteor.subscribe('histMeteoData')
   return {
-    histTemperatures: HistTemperatures.find({ts: {$gte: new Date(new Date().setDate(new Date().getTime()-3600000))}}).fetch(),
-    histMeteo: HistMeteo.find({ts: {$gte: new Date(new Date().setDate(new Date().getTime()-3600000))}}).fetch(),
+    histTemperatures: HistTemperatures.find({ts: {$gte: new Date(new Date().setDate(new Date().getDate()-0.01))}}).fetch(),
+    histMeteo: HistMeteo.find({ts: {$gte: new Date(new Date().setDate(new Date().getDate()-0.01))}}).fetch(),
     detail: "highest"
   }
 })(ChartComponentContainer)
