@@ -19,7 +19,7 @@ class ChartComponent extends React.Component {
       tempSet:   [],
       tempAct:   [],
       valve:     [],
-      detail:    "this.props.detail"
+      detail:    this.props.detail
     }
   }
 
@@ -160,8 +160,7 @@ export default HighChartsContainer = withTracker((props) => {
   Meteor.subscribe('histTemperaturesData')
   Meteor.subscribe('histMeteoData')
   return {
-    histTemperatures: HistTemperatures.find({ts: {$gte: new Date(new Date().setDate(new Date().getDate()-0.01))}}).fetch(),
-    histMeteo: HistMeteo.find({ts: {$gte: new Date(new Date().setDate(new Date().getDate()-0.01))}}).fetch(),
-    detail: "highest"
+    histTemperatures: HistTemperatures.find({ts: {$gte: props.from, $lte: props.to}}).fetch(),
+    histMeteo: HistMeteo.find({ts: {$gte: props.from, $lte: props.to}}).fetch()
   }
 })(ChartComponentContainer)
