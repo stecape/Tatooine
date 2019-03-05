@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles'
 import { withTracker } from 'meteor/react-meteor-data'
 import { Settings } from '../../api/Settings'
 import TimeSelectionForm from '../components/ChartComponent/TimeSelectionForm'
-import DetailSelectionForm from '../components/ChartComponent/DetailSelectionForm'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
@@ -49,6 +48,10 @@ class Trends extends React.Component {
 
   //a timer update the actual moment time each 500ms. This is the timebase of the real time charting.
   componentDidMount() {
+    this.setState({
+      to: new Date(),
+      from: new Date(new Date().getTime() - this.state.width*this.state.unit*1000)
+    })
     this.timer = setInterval(() => {
       if (this.state.selectedOption != "Period") {
         this.setState({
@@ -56,7 +59,7 @@ class Trends extends React.Component {
           from: new Date(new Date().getTime() - this.state.width*this.state.unit*1000)
         })
       }
-    }, 500)
+    }, 30000)
   }
 
   componentWillUnmount(){
@@ -78,6 +81,8 @@ class Trends extends React.Component {
     return(
       <div>
       <Dialog
+        fullWidth={true}
+        maxWidth='sm'
         open={this.state.openModal}
         onClose={this.handleClose}
         scroll='paper'
@@ -88,15 +93,11 @@ class Trends extends React.Component {
           <TimeSelectionForm      
             from =           {this.state.from}
             to =             {this.state.to}
-            mode =           {this.state.mode}
             width =          {this.state.width}
             unit =           {this.state.unit}
             selectedOption = {this.state.selectedOption}
-            changeEvent =    {(st) => {console.log(st); this.setState(st)}}
-          />
-          <DetailSelectionForm
-            detail =      {this.state.detail}
-            changeEvent = {(st) => this.setState(st)}
+            detail =         {this.state.detail}
+            changeEvent =    {(st) => {this.setState(st)}}
           />
         </DialogContent>
         <DialogActions>
@@ -116,7 +117,7 @@ class Trends extends React.Component {
           <Grid item md={12} sm={12} xs={12}>
             <Paper className={classes.root} elevation={1}>
               <ChartComponent 
-                room=    "Bagno"
+                room =   "Bagno"
                 from =   {this.state.from}
                 to =     {this.state.to}
                 detail = {this.state.detail}

@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
+import { withStyles } from '@material-ui/core/styles'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormControl from '@material-ui/core/FormControl'
+import FormLabel from '@material-ui/core/FormLabel'
 
-export default class DetailSelectionForm extends Component {
+class DetailSelectionForm extends Component {
 
   constructor(props) {
     super(props)
@@ -22,6 +29,7 @@ export default class DetailSelectionForm extends Component {
 	}
 
   render () {
+    const { classes } = this.props
 
 		this.handleSubmit = (event) => {
 		  event.preventDefault()
@@ -29,64 +37,55 @@ export default class DetailSelectionForm extends Component {
 
 		this.Items = (props) => {
 			return (
-				<form onSubmit={this.handleSubmit}>
-				  <div>
-				    <label>
-				      <input type="radio" value="highest" 
-								checked={props.detail === 'highest'} 
-								onChange={(e) => props.changeEvent({detail: "highest"})} />
-								Highest
-				    </label>
-				  </div>
-				  <div>
-				    <label>
-				      <input type="radio" value="minutely" 
-								checked={props.detail === 'minutely'} 
-								onChange={(e) => props.changeEvent({detail: "minutely"})} />
-								Minutely
-				    </label>
-				  </div>
-				  <div>
-				    <label>
-				      <input type="radio" value="hourly" 
-								checked={props.detail === 'hourly'} 
-								onChange={(e) => props.changeEvent({detail: "hourly"})} />
-								Hourly
-				    </label>
-				  </div>
-				  <div>
-				    <label>
-				      <input type="radio" value="daily" 
-								checked={props.detail === 'daily'} 
-								onChange={(e) => props.changeEvent({detail: "daily"})} />
-								Daily
-				    </label>
-				  </div>
-				  <div>
-				    <label>
-				      <input type="radio" value="weekly" 
-								checked={props.detail === 'weekly'} 
-								onChange={(e) => props.changeEvent({detail: "weekly"})} />
-								Weekly
-				    </label>
-				  </div>
-				  <div>
-				    <label>
-				      <input type="radio" value="monthly" 
-								checked={props.detail === 'monthly'} 
-								onChange={(e) => props.changeEvent({detail: "monthly"})} />
-								Monthly
-				    </label>
-				  </div>
-				  <div>
-				    <label>
-				      <input type="radio" value="yearly" 
-								checked={props.detail === 'yearly'} 
-								onChange={(e) => props.changeEvent({detail: "yearly"})} />
-								Yearly
-				    </label>
-				  </div>
-				</form>
+	      <div className={classes.root}>
+	        <FormControl component="fieldset" className={classes.formControl}>
+	          <FormLabel component="legend">{this.props.title}</FormLabel>
+	          <RadioGroup
+	            aria-label="detail"
+	            name="detail2"
+	            className={classes.group}
+	            value={this.state.detail}
+	            onChange={(e) => props.changeEvent({detail: e.target.value})}
+	          >
+	            <FormControlLabel
+	              value="highest"
+	              control={<Radio color="primary" />}
+	              label="Highest"
+	            />
+	            <FormControlLabel
+	              value="minutely"
+	              control={<Radio color="primary" />}
+	              label="Minutely"
+	            />
+	            <FormControlLabel
+	              value="hourly"
+	              control={<Radio color="primary" />}
+	              label="Hourly"
+	            />
+	            <FormControlLabel
+	              value="daily"
+	              control={<Radio color="primary" />}
+	              label="Daily"
+	            />
+	            <FormControlLabel
+	              value="weekly"
+	              control={<Radio color="primary" />}
+	              label="Weekly"
+	            />
+	            <FormControlLabel
+	              value="monthly"
+	              control={<Radio color="primary" />}
+	              label="Monthly"
+	            />
+	            <FormControlLabel
+	              value="yearly"
+	              control={<Radio color="primary" />}
+	              label="Yearly"
+	            />
+						</RadioGroup>
+          	<FormHelperText>densità di dati</FormHelperText>
+					</FormControl>
+				</div>
 			)
 		}
 
@@ -97,7 +96,6 @@ export default class DetailSelectionForm extends Component {
 
   	return (
   	 <div>
-  	 	<h5>{this.props.title}</h5>
   	 	{this.Items(args)}
   	 </div>
   	)
@@ -108,3 +106,5 @@ export default class DetailSelectionForm extends Component {
 DetailSelectionForm.defaultProps = {
 	title: "Data Detail Level"
 }
+
+export default withStyles(styles)(DetailSelectionForm)
