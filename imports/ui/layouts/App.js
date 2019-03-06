@@ -7,6 +7,7 @@ import Home from '../pages/Home'
 import Controls from '../pages/Controls'
 import Trends from '../pages/Trends'
 import Admin from '../pages/Admin'
+import Privacy from '../pages/Privacy'
 import Cmd from '../components/Cmd'
 import Logout from '../components/Logout'
 import Loading from '../components/Loading'
@@ -69,6 +70,9 @@ class App extends Component {
             
                     {/*Admin is a protected route, so if the user is a 'ras' Admin is loaded, else 403*/}
                     <Route path="/admin" render={() => { return (Roles.userIsInRole(this.props.user, ['ras']) ? <Admin /> : <Quattrocentotre />) }} />
+            
+                    {/*Privacy*/}
+                    <Route path="/privacy" render={() => {return <Privacy />}} />
 
       							{/*cmd is a protected route, so if the user is a 'ras' Admin is loaded, else 403*/}
       	    				<Route path="/Cmd/:cmd" render={(props) => { return (Roles.userIsInRole(this.props.user, ['ras', 'power user']) ? <Cmd {...props}/> : <Quattrocentotre />) }} />
@@ -82,7 +86,13 @@ class App extends Component {
 
 			{/*if nobody is loggin in and nobody is logged in, show login screen*/}
 			{ !this.props.loggingIn && !auth &&	
-				<Login />
+			      <BrowserRouter>
+              <Switch>
+                {/*Privacy*/}
+                <Route path="/privacy" render={() => {return <Privacy />}} />
+                <Route render={() => {return <Login />}} />
+              </Switch>
+            </BrowserRouter>
 			}
 			</div>
     )

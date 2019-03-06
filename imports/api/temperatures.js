@@ -7,10 +7,10 @@ export const HistTemperatures = new Mongo.Collection('histTemperatures')
 
 const TemperatureList = [
   { "env" : "1", "set" : "0.0", "act" : "0.0", "name": "Studio", "status" : "0"},
-  { "env" : "2", "set" : "0.0", "act" : "0.0", "name": "Ingresso", "status" : "0"},
-  { "env" : "3", "set" : "0.0", "act" : "0.0", "name": "Bagno", "status" : "0"},
-  { "env" : "4", "set" : "0.0", "act" : "0.0", "name": "Cucina", "status" : "0"},
-  { "env" : "5", "set" : "0.0", "act" : "0.0", "name": "Sala", "status" : "0"},
+  { "env" : "2", "set" : "0.0", "act" : "0.0", "name": "Sala", "status" : "0"},
+  { "env" : "3", "set" : "0.0", "act" : "0.0", "name": "Cucina", "status" : "0"},
+  { "env" : "4", "set" : "0.0", "act" : "0.0", "name": "Ingresso", "status" : "0"},
+  { "env" : "5", "set" : "0.0", "act" : "0.0", "name": "Bagno", "status" : "0"},
   { "env" : "6", "set" : "0.0", "act" : "0.0", "name": "1P", "status" : "0"}
 ]
 
