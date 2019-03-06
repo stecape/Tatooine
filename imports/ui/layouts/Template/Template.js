@@ -96,7 +96,7 @@ class Template extends React.Component {
           </Toolbar>
         </AppBar>
         <nav className={classes.drawer}>
-          <Hidden smUp implementation="css">
+          <Hidden mdUp implementation="css">
             <Drawer
               container={this.props.container}
               variant="temporary"
@@ -111,7 +111,7 @@ class Template extends React.Component {
               <List><MenuItems /></List>
             </Drawer>
           </Hidden>
-          <Hidden xsDown implementation="css">
+          <Hidden smDown implementation="css">
             <Drawer
               classes={{
                 paper: classes.drawerPaper,

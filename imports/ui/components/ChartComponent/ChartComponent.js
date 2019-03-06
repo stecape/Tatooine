@@ -25,11 +25,12 @@ class ChartComponent extends React.Component {
 
   static getDerivedStateFromProps(nextProps, prevState){
 
-/*    var tempRange = getDataRange(
+    var tempRange = getDataRange(
       nextProps.histMeteo,
       "Esterno",
+      "temperature",
       nextProps.detail
-    )*/
+    )
     var temp = getDataSeries(
       nextProps.histMeteo,
       "Esterno",
@@ -56,12 +57,12 @@ class ChartComponent extends React.Component {
     )
 
     var series = {
-      // tempRange: tempRange,
+      tempRange: tempRange,
       temp:      temp,
       tempSet:   tempSet,
       tempAct:   tempAct,
       valve:     valve,
-      // detail:    nextProps.detail
+      detail:    nextProps.detail
     }
     return series
     
@@ -111,7 +112,7 @@ class ChartComponent extends React.Component {
         <YAxis id="temperature">
           <YAxis.Title>Temperature (°C)</YAxis.Title>
           {
-            this.state.detail != "highest" && 
+            !["highest", "minutely"].includes(this.state.detail) && 
             <AreaSplineRangeSeries
               id="tempRange"
               name="External Temperature Range"
@@ -126,7 +127,7 @@ class ChartComponent extends React.Component {
 
           <SplineSeries
             id="temp"
-            name= {this.state.detail != "highest" ? "External Temperature Average" : "External Temperature"}
+            name= {!["highest", "minutely"].includes(this.state.detail) ? "External Temperature Average" : "External Temperature"}
             data= {this.state.temp}
             step
             marker= {{enabled: false}}

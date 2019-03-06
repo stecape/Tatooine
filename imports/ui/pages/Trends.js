@@ -37,7 +37,7 @@ class Trends extends React.Component {
     super(props)
     this.state = {
       openModal: false,
-      detail: 'highest',
+      detail: 'hourly',
       from: new Date(),
       to: new Date(new Date().setDate(new Date().getDate()-1)),
       width: 1,

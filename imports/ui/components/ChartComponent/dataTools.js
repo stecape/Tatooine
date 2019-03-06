@@ -1,20 +1,10 @@
-/*
 
-getCollection = (d, gte, lte) => {
-  let x = d
-    .reduce((acc,t) => {
-        return acc.concat(t.data)
-      }, [] )
-    .filter(t => {
-        var low = new Date(gte).getTime()
-        var up = new Date(lte).getTime()
-        var comp = (low <= t[0]) && (t[0] <= up)
-        return comp
-      })
-    .sort((a, b) => {
-        return a[0] - b[0]
-      })
-  return x
+getCollection = (d, name, variable) => {
+  return d.reduce((acc, sample) => {
+    var temp = sample.data.find(station => station.name === name)[variable]
+    acc.push([sample.ts.getTime(), Number(temp)])
+    return acc
+  }, [])
 }
 
 getMinutely = (d) => {
@@ -49,8 +39,8 @@ getHourly = (d) => {
       let day = _t.getDate()
       day = day < 10 ? "0"+day : ""+day
       let hour = _t.getHours()
-      hours = hours < 10 ? "0"+hours : ""+hours
-      let date = "" + year + "-" + month + "-" + day + "T" + hours + ":" + "00" 
+      hour = hour < 10 ? "0"+hour : ""+hour
+      let date = "" + year + "-" + month + "-" + day + "T" + hour + ":" + "00" 
       if (!acc[date]) acc[date] = { date: new Date(date).getTime(), data: [], min: null, max: null, average: null }
       acc[date].data = acc[date].data.concat(t[1])
       acc[date].average = parseFloat((acc[date].data.reduce((acc,t) => {return acc = acc + t})/acc[date].data.length).toFixed(1))
@@ -134,29 +124,23 @@ getYearly = (d) => {
   )
 }
 
-getData = (d, gte, lte, detail) => {
+getData = (d, detail) => {
   switch (detail) {
   case "highest":
-    return getCollection(d, gte, lte)
+    return d
   case "minutely":
-    return getMinutely(getCollection(d, gte, lte))
+    return d //getMinutely(d)
   case "hourly":
-    return getHourly(getCollection(d, gte, lte))
+    return getHourly(d)
   case "daily":      
-    return getDaily(getCollection(d, gte, lte))
+    return getDaily(d)
   case "weekly":
-    return getWeekly(getDaily(getCollection(d, gte, lte)))
+    return getWeekly(getDaily(d))
   case "monthly":
-    return getMonthly(getCollection(d, gte, lte))
+    return getMonthly(d)
   case "yearly":
-    return getYearly(getCollection(d, gte, lte))
+    return getYearly(d)
   }
-}
-
-getSeries = (d) => {
-    return Object.keys(d).reduce((acc, t) => {
-      return [...acc, [d[t].date, d[t].average]]
-    }, [])
 }
 
 getRange = (d) => {
@@ -165,42 +149,26 @@ getRange = (d) => {
     }, [])
 }
 
-export const getDataSeries = (d, gte, lte, detail) => {
+export const getDataRange = (d, name, variable, detail) => {
   if (d.length > 0) {
-    return detail != 'highest' ? getSeries(getData(d, gte, lte, detail)) : getData(d, gte, lte, detail)
+    var collection = getCollection(d, name, variable)
+    var range = getRange(getData(collection, detail))
+    return range
   }
   return []
 }
-export const getDataRange = (d, gte, lte, detail) => {
-  if (d.length > 0) {
-    return detail != 'highest' &&
-    getRange(getData(d, gte, lte, detail))
-  }
-  return []
-}
-*/
 
-export const getDataRange = (d, name, detail) => {
-  if (d.length > 0) {
-    var x = d.reduce((acc, sample) => {
-      var temp = sample.data.find(station => station.name === name).temperature
-      acc.push([sample.ts.getTime(), temp])
-      return acc
+getSeries = (d) => {
+    return Object.keys(d).reduce((acc, t) => {
+      return [...acc, [d[t].date, d[t].average]]
     }, [])
-    console.log(x)
-    return x
-  }
-  return []
 }
 
 export const getDataSeries = (d, name, variable, detail) => {
   if (d.length > 0) {
-    return d.reduce((acc, sample) => {
-      var temp = sample.data.find(station => station.name === name)[variable]
-      acc.push([sample.ts.getTime(), Number(temp)])
-      return acc
-    }, [])
-    return
+    var collection = getCollection(d, name, variable)
+    var series = !["highest", "minutely"].includes(detail) ? getSeries(getData(collection, detail)) : getData(collection, detail)
+    return series
   }
   return []
 }
