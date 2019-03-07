@@ -158,10 +158,10 @@ class ChartComponent extends React.Component {
 ChartComponentContainer = withHighcharts(ChartComponent, Highcharts)
 
 export default HighChartsContainer = withTracker((props) => {
-  Meteor.subscribe('histTemperaturesData')
-  Meteor.subscribe('histMeteoData')
+  const TempSubs = Meteor.subscribe('histTemperaturesData')
+  const MeteoSubs = Meteor.subscribe('histMeteoData')
   return {
-    histTemperatures: HistTemperatures.find({ts: {$gte: props.from, $lte: props.to}}).fetch(),
-    histMeteo: HistMeteo.find({ts: {$gte: props.from, $lte: props.to}}).fetch()
+    histTemperatures: TempSubs.ready() && HistTemperatures.find({ts: {$gte: props.from, $lte: props.to}}).fetch().sort((a, b) => {return a.ts - b.ts}),
+    histMeteo: MeteoSubs.ready() && HistMeteo.find({ts: {$gte: props.from, $lte: props.to}}).fetch().sort((a, b) => {return a.ts - b.ts})
   }
 })(ChartComponentContainer)

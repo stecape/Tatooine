@@ -54,7 +54,7 @@ class Template extends React.Component {
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
+        <AppBar position="absolute" className={classes.appBar}>
           <Toolbar>
             <IconButton
               color="inherit"
